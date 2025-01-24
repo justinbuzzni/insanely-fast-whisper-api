@@ -1,4 +1,8 @@
+# cudnn 9
 FROM nvcr.io/nvidia/pytorch:24.01-py3
+# cudnn 8 
+# FROM nvcr.io/nvidia/pytorch:21.12-py3
+# FROM pytorch/pytorch:2.1.0-cuda11.8-cudnn8-runtime
 
 ENV PYTHON_VERSION=3.10
 ENV POETRY_VENV=/app/.venv
@@ -33,6 +37,7 @@ ENV CUDA_VISIBLE_DEVICES=0
 RUN uv pip install wheel ninja packaging
 RUN uv pip install flash-attn --no-build-isolation
 RUN uv pip install python-multipart
+RUN uv pip install faster-whisper
 EXPOSE 9000
 
 CMD gunicorn --bind 0.0.0.0:9000 --workers 1 --timeout 0 app.app:app -k uvicorn.workers.UvicornWorker

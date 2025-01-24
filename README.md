@@ -1,11 +1,17 @@
 ```
 docker build -t insanely-fast-whisper .        
 ```
-
+* 현재 동작하는 버전
 ```
 docker run -it -e MODEL_NAME=openai/whisper-large-v3-turbo -p 19002:9000 -v /home/walter/.cache:/root/.cache --gpus all insanely-fast-whisper:latest 
 
 ```
+ * faster 모델은 cudnn 8 을 설치해야 동작함. 이건 하지 않음 
+```
+docker run -it -e MODEL_NAME=Systran/faster-whisper-large-v3 -p 19002:9000 -v /home/walter/.cache:/root/.cache --gpus all insanely-fast-whisper:latest 
+
+```
+
 
 # Insanely Fast Whisper API
 An API to transcribe audio with [OpenAI's Whisper Large v3](https://huggingface.co/openai/whisper-large-v3)! Powered by 🤗 Transformers, Optimum & flash-attn

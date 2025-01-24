@@ -44,6 +44,13 @@ print("model_name:",model_name)
 # model_name = "Systran/faster-whisper-large-v3"
 is_use_faster = False
 if "faster" in model_name:
+    '''
+    cudnn 8 을 설치해야 동작함 
+    FROM nvcr.io/nvidia/pytorch:21.12-py3 
+    이걸 써야함. 
+    python 3.10 은 안됨. 
+    그래서 해보려다가 공수가 너무 커져서 중단함
+    '''
     from faster_whisper import WhisperModel
     # model_name == "Systran/faster-whisper-large-v3":
     is_use_faster = True
