@@ -22,7 +22,7 @@ from pathlib import Path
 import tempfile
 import subprocess
 
-from faster_whisper import WhisperModel
+
 
 
 admin_key = os.environ.get(
@@ -40,11 +40,18 @@ fly_machine_id = os.environ.get(
 model_name = os.environ.get(
     "MODEL_NAME",
 )
-model_name = "Systran/faster-whisper-large-v3"
+print("model_name:",model_name)
+# model_name = "Systran/faster-whisper-large-v3"
 is_use_faster = False
 if "faster" in model_name:
+    from faster_whisper import WhisperModel
     # model_name == "Systran/faster-whisper-large-v3":
     is_use_faster = True
+    # GPU 메모리 설정
+    torch.cuda.empty_cache()
+    torch.backends.cudnn.benchmark = True
+
+    # WhisperModel 초기화
     model = WhisperModel(
         model_name,
         device="cuda",

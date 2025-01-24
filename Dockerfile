@@ -29,11 +29,10 @@ RUN poetry config virtualenvs.in-project true
 RUN uv pip install -r <(poetry export --format=requirements.txt)
 
 COPY . .
-
+ENV CUDA_VISIBLE_DEVICES=0
 RUN uv pip install wheel ninja packaging
 RUN uv pip install flash-attn --no-build-isolation
 RUN uv pip install python-multipart
-RUN uv pip install faster-whisper
 EXPOSE 9000
 
 CMD gunicorn --bind 0.0.0.0:9000 --workers 1 --timeout 0 app.app:app -k uvicorn.workers.UvicornWorker

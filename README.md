@@ -3,7 +3,7 @@ docker build -t insanely-fast-whisper .
 ```
 
 ```
-docker run -it -e MODEL_NAME=Systran/faster-whisper-large-v3 -p 19002:9000 -v /home/walter/.cache:/root/.cache --gpus all insanely-fast-whisper:latest 
+docker run -it -e MODEL_NAME=openai/whisper-large-v3-turbo -p 19002:9000 -v /home/walter/.cache:/root/.cache --gpus all insanely-fast-whisper:latest 
 
 ```
 
