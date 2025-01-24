@@ -1,9 +1,17 @@
 ```
 docker build -t insanely-fast-whisper .        
 ```
-* 현재 동작하는 버전
+* 화자분리 
+ * 아래 사이트 들어가서 승인 받아야 함 
 ```
-docker run -it -e MODEL_NAME=openai/whisper-large-v3-turbo -p 19002:9000 -v /home/walter/.cache:/root/.cache --gpus all insanely-fast-whisper:latest 
+https://hf.co/pyannote/speaker-diarization-3.1
+https://huggingface.co/pyannote/segmentation-3.0
+```
+
+* 현재 동작하는 버전
+ * 아래 token 부분에 자신이 가입한 huggingface 토큰을 넣어야 함 
+```
+docker run -it -e HF_TOKEN=token -e MODEL_NAME=openai/whisper-large-v3-turbo -p 19002:9000 -v /home/walter/.cache:/root/.cache --gpus all insanely-fast-whisper:latest 
 
 ```
  * faster 모델은 cudnn 8 을 설치해야 동작함. 이건 하지 않음 
