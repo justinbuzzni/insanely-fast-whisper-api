@@ -6,29 +6,34 @@ ENV POETRY_VENV=/app/.venv
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python${PYTHON_VERSION}-venv \
     ffmpeg \
+    curl \
     && rm -rf /var/lib/apt/lists/*
+
+# Install uv into the correct location and update PATH
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
+    && export PATH="/root/.local/bin:$PATH" \
+    && uv --version
 
 RUN python -m venv $POETRY_VENV \
     && $POETRY_VENV/bin/pip install -U pip setuptools \
     && $POETRY_VENV/bin/pip install poetry==1.7.1
 
-ENV PATH="${PATH}:${POETRY_VENV}/bin"
+# Add Poetry venv and uv's bin directory to PATH
+ENV PATH="/root/.local/bin:${POETRY_VENV}/bin:${PATH}"
 
 WORKDIR /app
 
 COPY poetry.lock pyproject.toml ./
 
 RUN poetry config virtualenvs.in-project true
-RUN poetry install --no-root
+RUN uv pip install -r <(poetry export --format=requirements.txt)
 
 COPY . .
 
-RUN poetry install
-RUN $POETRY_VENV/bin/pip install -U wheel \
-    && $POETRY_VENV/bin/pip install ninja packaging
-
-RUN $POETRY_VENV/bin/pip install flash-attn --no-build-isolation
-
+RUN uv pip install wheel ninja packaging
+RUN uv pip install flash-attn --no-build-isolation
+RUN uv pip install python-multipart
+RUN uv pip install faster-whisper
 EXPOSE 9000
 
 CMD gunicorn --bind 0.0.0.0:9000 --workers 1 --timeout 0 app.app:app -k uvicorn.workers.UvicornWorker
